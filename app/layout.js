@@ -1,4 +1,5 @@
 import "./globals.css";
+import LenisProvider from "@/components/utils/LenisProvider";
 
 export const metadata = {
   title: "Create Next App",
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning className="antialiased">
+        <LenisProvider />
         {children}
       </body>
     </html>

@@ -9,13 +9,16 @@ export default function Home() {
     <>
       <Navbar />
       <div id="home"><Hero /></div>
+      
+      {/* About section content */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-6">
-          <TextAnimate className="dm-sans-regular text-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight" duration={600}>
+          <TextAnimate className="dm-sans-regular text-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight" duration={6000}>
             Every project is a portal. A single idea bloomed into a digital realm, where dreams & possibilities intertwine.
           </TextAnimate>
         </div>
       </section>
+      
       <div id="services"><Services /></div>
       <div id="contact"><Contact /></div>
     </>
