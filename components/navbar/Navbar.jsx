@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
+import NavIcon from "@/components/navbar/NavIcon";
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false);
@@ -22,21 +23,10 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <div className="pointer-events-none h-10 w-10 opacity-0 max-sm:h-6 max-sm:w-6" />
-        <a href="/">
-          <img
-            alt="Square43 Logo"
-            width="322"
-            height="38"
-            className="w-80 max-w-none cursor-pointer invert max-sm:w-40"
-            src="/next.svg"
-          />
+        <a href="/" className="text-white text-2xl sm:text-3xl font-semibold tracking-tight">
+          SideSwitch
         </a>
-        <div className="group relative h-10 w-10 cursor-pointer max-sm:h-6 max-sm:w-6">
-          <div className="absolute top-0 left-0 h-0.5 w-full bg-white max-sm:h-[1px]" />
-          <div className="absolute top-1/3 left-1/2 h-0.5 w-full -translate-x-1/2 bg-white transition-all max-sm:h-[1px] md:group-hover:top-1/2 md:group-hover:left-0 md:group-hover:-rotate-90" />
-          <div className="absolute top-2/3 left-1/2 h-0.5 w-full -translate-x-1/2 bg-white transition-all max-sm:h-[1px] md:group-hover:top-1/2 md:group-hover:left-full md:group-hover:rotate-90" />
-          <div className="absolute bottom-0 left-0 h-0.5 w-full bg-white max-sm:h-[1px]" />
-        </div>
+        <NavIcon />
       </div>
     </header>
   );
