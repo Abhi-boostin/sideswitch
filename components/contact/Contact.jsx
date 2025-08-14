@@ -13,9 +13,36 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const containerRef = useRef(null);
   const fromRef = useRef(null);
   const toRef = useRef(null);
+
+  // Scroll-based theme switching
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const isInView = rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5;
+        
+        if (isInView && !isDarkTheme) {
+          setIsDarkTheme(true);
+          document.body.classList.add('dark-theme');
+        } else if (!isInView && isDarkTheme) {
+          setIsDarkTheme(false);
+          document.body.classList.remove('dark-theme');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Check initial position
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.classList.remove('dark-theme');
+    };
+  }, [isDarkTheme]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,11 +76,20 @@ const Contact = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 py-20 relative overflow-hidden">
+    <section 
+      ref={containerRef}
+      className={`min-h-screen py-20 relative overflow-hidden transition-all duration-1000 ${
+        isDarkTheme 
+          ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900' 
+          : 'bg-gradient-to-br from-slate-50 via-white to-blue-50'
+      }`}
+    >
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className={`absolute inset-0 transition-opacity duration-1000 ${
+        isDarkTheme ? 'opacity-20' : 'opacity-5'
+      }`}>
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, #3b82f6 1px, transparent 1px), radial-gradient(circle at 75% 75%, #10b981 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle at 25% 25%, ${isDarkTheme ? '#60a5fa' : '#3b82f6'} 1px, transparent 1px), radial-gradient(circle at 75% 75%, ${isDarkTheme ? '#34d399' : '#10b981'} 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
         }}></div>
       </div>
@@ -61,19 +97,31 @@ const Contact = () => {
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         {/* Header Section */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-green-100 px-4 py-2 rounded-full mb-6">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-gray-700">Get In Touch</span>
+          <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full mb-6 transition-all duration-500 ${
+            isDarkTheme 
+              ? 'bg-gradient-to-r from-blue-900/50 to-green-900/50 border border-blue-700/30' 
+              : 'bg-gradient-to-r from-blue-100 to-green-100'
+          }`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse transition-colors duration-500 ${
+              isDarkTheme ? 'bg-blue-400' : 'bg-blue-500'
+            }`}></div>
+            <span className={`text-sm font-medium transition-colors duration-500 ${
+              isDarkTheme ? 'text-blue-200' : 'text-gray-700'
+            }`}>Get In Touch</span>
           </div>
           
-          <h2 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h2 className={`text-6xl font-bold mb-6 leading-tight transition-colors duration-500 ${
+            isDarkTheme ? 'text-white' : 'text-gray-900'
+          }`}>
             Let's{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
               Connect
             </span>
           </h2>
           
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-xl max-w-3xl mx-auto leading-relaxed transition-colors duration-500 ${
+            isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Ready to bring your vision to life? We'd love to hear about your project and discuss how we can help you achieve your goals.
           </p>
         </div>
@@ -81,14 +129,22 @@ const Contact = () => {
         {/* Contact Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: Contact Form */}
-          <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a message</h3>
+          <div className={`rounded-3xl shadow-2xl p-8 border transition-all duration-500 ${
+            isDarkTheme 
+              ? 'bg-gray-800 border-gray-700 shadow-gray-900/50' 
+              : 'bg-white border-gray-100'
+          }`}>
+            <h3 className={`text-2xl font-bold mb-6 transition-colors duration-500 ${
+              isDarkTheme ? 'text-white' : 'text-gray-900'
+            }`}>Send us a message</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name & Email Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 transition-colors duration-500 ${
+                    isDarkTheme ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Full Name *
                   </label>
                   <input
@@ -97,13 +153,19 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${
+                      isDarkTheme 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:bg-white'
+                    }`}
                     placeholder="John Doe"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 transition-colors duration-500 ${
+                    isDarkTheme ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Email Address *
                   </label>
                   <input
@@ -112,7 +174,11 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${
+                      isDarkTheme 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:bg-white'
+                    }`}
                     placeholder="john@company.com"
                   />
                 </div>
@@ -120,7 +186,9 @@ const Contact = () => {
 
               {/* Company */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Company
                 </label>
                 <input
@@ -128,21 +196,31 @@ const Contact = () => {
                   name="company"
                   value={formData.company}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${
+                    isDarkTheme 
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600' 
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:bg-white'
+                  }`}
                   placeholder="Your Company"
                 />
               </div>
 
               {/* Service Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Service Interest
                 </label>
                 <select
                   name="service"
                   value={formData.service}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                    isDarkTheme 
+                      ? 'bg-gray-700 border-gray-600 text-white' 
+                      : 'bg-gray-50 border-gray-200 text-gray-900'
+                  }`}
                 >
                   <option value="web-development">Web Development</option>
                   <option value="branding-design">Branding & Design</option>
@@ -154,7 +232,9 @@ const Contact = () => {
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Project Details *
                 </label>
                 <textarea
@@ -163,7 +243,11 @@ const Contact = () => {
                   onChange={handleInputChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white resize-none"
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${
+                    isDarkTheme 
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-600' 
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:bg-white'
+                  }`}
                   placeholder="Tell us about your project, goals, and timeline..."
                 />
               </div>
@@ -201,27 +285,47 @@ const Contact = () => {
           <div className="space-y-8">
             {/* Contact Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+              <div className={`rounded-2xl p-6 shadow-lg border transition-all duration-500 hover:shadow-xl ${
+                isDarkTheme 
+                  ? 'bg-gray-800 border-gray-700 shadow-gray-900/50 hover:shadow-gray-900/70' 
+                  : 'bg-white border-gray-100'
+              }`}>
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">Email Us</h4>
-                <p className="text-gray-600">hello@sideswitch.com</p>
-                <p className="text-gray-600">projects@sideswitch.com</p>
+                <h4 className={`text-lg font-semibold mb-2 transition-colors duration-500 ${
+                  isDarkTheme ? 'text-white' : 'text-gray-900'
+                }`}>Email Us</h4>
+                <p className={`transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                }`}>hello@sideswitch.com</p>
+                <p className={`transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                }`}>projects@sideswitch.com</p>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+              <div className={`rounded-2xl p-6 shadow-lg border transition-all duration-500 hover:shadow-xl ${
+                isDarkTheme 
+                  ? 'bg-gray-800 border-gray-700 shadow-gray-900/50 hover:shadow-gray-900/70' 
+                  : 'bg-white border-gray-100'
+              }`}>
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-2">Location</h4>
-                <p className="text-gray-600">London, UK</p>
-                <p className="text-gray-600">Remote Worldwide</p>
+                <h4 className={`text-lg font-semibold mb-2 transition-colors duration-500 ${
+                  isDarkTheme ? 'text-white' : 'text-gray-900'
+                }`}>Location</h4>
+                <p className={`transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                }`}>London, UK</p>
+                <p className={`transition-colors duration-500 ${
+                  isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                }`}>Remote Worldwide</p>
               </div>
             </div>
 
@@ -236,8 +340,14 @@ const Contact = () => {
             </div>
 
             {/* Process Steps */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Our Process</h4>
+            <div className={`rounded-2xl p-6 shadow-lg border transition-all duration-500 ${
+              isDarkTheme 
+                ? 'bg-gray-800 border-gray-700 shadow-gray-900/50' 
+                : 'bg-white border-gray-100'
+            }`}>
+              <h4 className={`text-lg font-semibold mb-4 transition-colors duration-500 ${
+                isDarkTheme ? 'text-white' : 'text-gray-900'
+              }`}>Our Process</h4>
               <div className="space-y-4">
                 {[
                   { step: "01", title: "Discovery Call", desc: "We discuss your project and requirements" },
@@ -249,8 +359,12 @@ const Contact = () => {
                       {item.step}
                     </div>
                     <div>
-                      <h5 className="font-medium text-gray-900">{item.title}</h5>
-                      <p className="text-sm text-gray-600">{item.desc}</p>
+                      <h5 className={`font-medium transition-colors duration-500 ${
+                        isDarkTheme ? 'text-white' : 'text-gray-900'
+                      }`}>{item.title}</h5>
+                      <p className={`text-sm transition-colors duration-500 ${
+                        isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                      }`}>{item.desc}</p>
                     </div>
                   </div>
                 ))}
