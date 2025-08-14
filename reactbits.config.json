@@ -1,0 +1,8 @@
+{
+  "framework": "next",
+  "language": "javascript",
+  "componentsDir": "components",
+  "alias": "@",
+  "cssFile": "app/globals.css",
+  "tailwind": true
+} 
