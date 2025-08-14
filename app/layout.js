@@ -1,5 +1,6 @@
 import "./globals.css";
 import LenisProvider from "@/components/utils/LenisProvider";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 
 export const metadata = {
   title: "Create Next App",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       </head>
       <body suppressHydrationWarning className="antialiased">
         <LenisProvider />
+        <SmoothCursor />
         {children}
       </body>
     </html>
